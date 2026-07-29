@@ -4,8 +4,8 @@
         <Company>shdwp</Company>
         <Description>PartyIcons plugin</Description>
         <Copyright>shdwp 2021</Copyright>
-        <PackageProjectUrl>https://github.com/nebel/xivPartyIcons</PackageProjectUrl>
-        <Version>1.2.3.1</Version>
+        <PackageProjectUrl>https://github.com/cycleapple/xivPartyIcons/tree/api13-tw</PackageProjectUrl>
+        <Version>1.2.3.2</Version>
     </PropertyGroup>
 
     <ItemGroup>
