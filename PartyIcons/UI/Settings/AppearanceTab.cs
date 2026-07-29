@@ -22,9 +22,9 @@ public sealed class AppearanceTab
     {
         ImGuiExt.Spacer(2);
 
-        ImGui.TextDisabled("Configure nameplate appearance");
+        ImGui.TextDisabled("設定名牌外觀");
 
-        ImGuiExt.SectionHeader("Presets");
+        ImGuiExt.SectionHeader("預設");
 
         List<Action> actions = [];
 
@@ -34,7 +34,7 @@ public sealed class AppearanceTab
         DrawDisplayConfig(Plugin.Settings.DisplayConfigs.BigJobIconAndPartySlot, ref actions);
         DrawDisplayConfig(Plugin.Settings.DisplayConfigs.RoleLetters, ref actions);
 
-        ImGuiExt.SectionHeader("User-created");
+        ImGuiExt.SectionHeader("使用者建立");
 
         var modes = Enum.GetValues<NameplateMode>()
             .Where(v => v is not (NameplateMode.Default or NameplateMode.Hide))
@@ -54,9 +54,9 @@ public sealed class AppearanceTab
         }
 
         ImGui.SameLine();
-        if (ImGui.Button("Create new")) {
+        if (ImGui.Button("建立新的設定")) {
             Plugin.Settings.DisplayConfigs.Custom.Add(
-                new DisplayConfig($"Custom {Plugin.Settings.DisplayConfigs.Custom.Count + 1}", _createMode));
+                new DisplayConfig($"自訂 {Plugin.Settings.DisplayConfigs.Custom.Count + 1}", _createMode));
             Plugin.Settings.Save();
         }
 
@@ -81,13 +81,13 @@ public sealed class AppearanceTab
         using var indent = ImRaii.PushIndent();
 
         if (config.Preset == DisplayPreset.Custom) {
-            ImGui.TextDisabled("User-created");
+            ImGui.TextDisabled("使用者建立");
             // ImGui.TextDisabled("Based on: ");
             // ImGui.SameLine();
             ImGui.TextUnformatted(UiNames.GetName(config.Mode));
 
             var name = config.Name ?? "";
-            if (ImGui.InputText("Name##rename", ref name, 100, ImGuiInputTextFlags.EnterReturnsTrue)) {
+            if (ImGui.InputText("名稱##rename", ref name, 100, ImGuiInputTextFlags.EnterReturnsTrue)) {
                 actions.Add(() =>
                 {
                     config.Name = name.Replace("%", "");
@@ -98,26 +98,26 @@ public sealed class AppearanceTab
             ImGui.Dummy(new Vector2(0, 6));
         }
 
-        ImGui.TextDisabled("Appearance");
+        ImGui.TextDisabled("外觀");
 
-        ImGuiExt.DrawIconSetCombo("Icon set", true, () => config.IconSetId, iconSetId =>
+        ImGuiExt.DrawIconSetCombo("圖示組", true, () => config.IconSetId, iconSetId =>
         {
             config.IconSetId = iconSetId;
             Plugin.Settings.Save();
         });
 
         var scale = config.Scale;
-        if (ImGui.SliderFloat("Scale", ref scale, 0.3f, 3f)) {
+        if (ImGui.SliderFloat("縮放", ref scale, 0.3f, 3f)) {
             config.Scale = Math.Clamp(scale, 0.1f, 10f);
             Plugin.Settings.Save();
         }
 
-        ImGuiComponents.HelpMarker("Hold Control and click the slider to input an exact value");
+        ImGuiComponents.HelpMarker("按住 Ctrl 並點擊滑桿，可輸入精確數值。");
 
-        using (var combo = ImRaii.Combo("Swap style", config.SwapStyle.ToString())) {
+        using (var combo = ImRaii.Combo("交換方式", UiNames.GetName(config.SwapStyle))) {
             if (combo) {
                 foreach (var style in Enum.GetValues<StatusSwapStyle>()) {
-                    if (ImGui.Selectable(style.ToString(), style == config.SwapStyle)) {
+                    if (ImGui.Selectable(UiNames.GetName(style), style == config.SwapStyle)) {
                         config.SwapStyle = style;
                         Plugin.Settings.Save();
                     }
@@ -127,14 +127,14 @@ public sealed class AppearanceTab
 
         ImGuiComponents.HelpMarker(
             """
-            Determines how to perform icon swaps for statuses set to 'Important':
-            - 'None' does nothing
-            - 'Swap' will swap the status icon and job icon positions
-            - 'Replace' will move the status icon into the job item slot, leaving the status icon empty
+            決定設為「重要」的狀態要如何交換圖示：
+            -「無」：不進行任何處理
+            -「交換」：交換狀態圖示與職業圖示的位置
+            -「取代」：將狀態圖示移至職業圖示欄位，並留空狀態圖示欄位
             """);
 
         if (config.Mode is NameplateMode.SmallJobIconAndRole or NameplateMode.RoleLetters) {
-            using var combo = ImRaii.Combo("Role display style", UiNames.GetName(config.RoleDisplayStyle));
+            using var combo = ImRaii.Combo("站位顯示方式", UiNames.GetName(config.RoleDisplayStyle));
             if (combo) {
                 foreach (var style in Enum.GetValues<RoleDisplayStyle>().Where(r => r != RoleDisplayStyle.None)) {
                     if (ImGui.Selectable(UiNames.GetName(style), style == config.RoleDisplayStyle)) {
@@ -146,34 +146,34 @@ public sealed class AppearanceTab
         }
 
         ImGuiExt.Spacer(6);
-        ImGui.TextDisabled("Job Icon");
+        ImGui.TextDisabled("職業圖示");
         using (ImRaii.PushId("jobIcon")) {
             DrawJobIcon(() => config.JobIcon, icon => config.JobIcon = icon);
         }
 
-        ImGui.TextDisabled("Status Icon");
+        ImGui.TextDisabled("狀態圖示");
         using (ImRaii.PushId("statusIcon")) {
             DrawJobIcon(() => config.StatusIcon, icon => config.StatusIcon = icon);
         }
 
         ImGuiExt.Spacer(6);
-        ImGui.TextDisabled("Status icon visibility by location");
+        ImGui.TextDisabled("各地點的狀態圖示顯示設定");
         foreach (var zoneType in Enum.GetValues<ZoneType>()) {
             DrawStatusSelector(config, zoneType);
         }
 
         ImGuiExt.Spacer(6);
-        ImGui.TextDisabled("Other actions");
-        if (ImGuiExt.ButtonEnabledWhen(ImGui.GetIO().KeyCtrl, "Reset to default")) {
+        ImGui.TextDisabled("其他操作");
+        if (ImGuiExt.ButtonEnabledWhen(ImGui.GetIO().KeyCtrl, "重設為預設值")) {
             config.Reset();
             Plugin.Settings.Save();
         }
 
-        ImGuiExt.HoverTooltip("Hold Control to allow reset");
+        ImGuiExt.HoverTooltip("按住 Ctrl 才能重設");
 
         if (config.Preset == DisplayPreset.Custom) {
             ImGui.SameLine();
-            if (ImGuiExt.ButtonEnabledWhen(ImGui.GetIO().KeyCtrl, "Delete")) {
+            if (ImGuiExt.ButtonEnabledWhen(ImGui.GetIO().KeyCtrl, "刪除")) {
                 actions.Add(() =>
                 {
                     Plugin.Settings.DisplaySelectors.RemoveSelectors(config);
@@ -182,7 +182,7 @@ public sealed class AppearanceTab
                 });
             }
 
-            ImGuiExt.HoverTooltip("Hold Control to allow deletion");
+            ImGuiExt.HoverTooltip("按住 Ctrl 才能刪除");
         }
 
         ImGuiExt.Spacer(3);
@@ -193,28 +193,28 @@ public sealed class AppearanceTab
         var icon = getter();
 
         var show = icon.Show;
-        if (ImGui.Checkbox("Show", ref show)) {
+        if (ImGui.Checkbox("顯示", ref show)) {
             setter(icon with { Show = show });
             Plugin.Settings.Save();
         }
 
         var scale = icon.Scale;
-        if (ImGui.SliderFloat("Scale", ref scale, 0.3f, 3f)) {
+        if (ImGui.SliderFloat("縮放", ref scale, 0.3f, 3f)) {
             setter(icon with { Scale = Math.Clamp(scale, 0.1f, 10f) });
             Plugin.Settings.Save();
         }
 
-        ImGuiComponents.HelpMarker("Hold Control and click the slider to input an exact value");
+        ImGuiComponents.HelpMarker("按住 Ctrl 並點擊滑桿，可輸入精確數值。");
 
         int[] pos = [icon.OffsetX, icon.OffsetY];
-        if (ImGui.SliderInt("Offset X/Y", pos.AsSpan(), -50, 50)) {
+        if (ImGui.SliderInt("X/Y 偏移", pos.AsSpan(), -50, 50)) {
             var x = (short)Math.Clamp(pos[0], -1000, 1000);
             var y = (short)Math.Clamp(pos[1], -1000, 1000);
             setter(icon with { OffsetX = x, OffsetY = y });
             Plugin.Settings.Save();
         }
 
-        ImGuiComponents.HelpMarker("Hold Control and click a slider to input an exact value");
+        ImGuiComponents.HelpMarker("按住 Ctrl 並點擊滑桿，可輸入精確數值。");
     }
 
     private static void DrawStatusSelector(DisplayConfig config, ZoneType zoneType)

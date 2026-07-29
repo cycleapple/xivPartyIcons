@@ -1,10 +1,11 @@
 {
   "Author": "shdwp, Avaflow, abashby, nebel",
   "Name": "Party Icons",
-  "Punchline": "Replace names with job icons, raid role positions and more!",
-  "Description": "Adjusts player nameplates base on current content. For example you can display raid positions (that are assigned automatically by listening to the chat), job icons, or names with job icons.\n\nReverse-engineering effort achieved by authors of JobIcons: haplo, daemitus, Loskh, wozaiha, without them this plugin would not be possible!",
+  "Punchline": "以職業圖示、團隊站位等資訊調整玩家名牌。",
+  "Description": "依目前所在內容調整玩家名牌，例如顯示從隊伍頻道自動判定的團隊站位、職業圖示，或同時顯示名稱與職業圖示。\n\n名牌功能的逆向工程奠基於 JobIcons 作者 haplo、daemitus、Loskh 與 wozaiha 的成果；沒有他們便不會有本插件。",
   "InternalName": "PartyIcons",
   "RepoUrl": "https://github.com/cycleapple/xivPartyIcons/tree/api13-tw",
+  "DalamudApiLevel": 13,
   "Tags": [
     "UI"
   ]

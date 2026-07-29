@@ -99,9 +99,9 @@ public sealed class ViewModeSetter
         else {
             if (_configuration.ChatContentMessage) {
                 var sb = new Lumina.Text.SeStringBuilder();
-                sb.Append("Entering ");
+                sb.Append("進入 ");
                 sb.Append(content.Name);
-                sb.Append(".");
+                sb.Append("。");
                 Service.ChatGui.Print(sb.ToArray(), Service.PluginInterface.InternalName, 45);
             }
 

@@ -24,11 +24,11 @@ public sealed class GeneralTab
             var usePriorityIcons = true;
             ImGui.Checkbox("##usePriorityIcons", ref usePriorityIcons);
             ImGui.SameLine();
-            ImGui.Text("Prioritize status icons");
+            ImGui.Text("優先顯示狀態圖示");
             using (ImRaii.PushIndent())
             using (ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudOrange)) {
                 ImGui.TextWrapped(
-                    "Note: Priority status icons are now configured per nameplate type from the 'Appearance' tab via the 'Swap Style' option. You can also configure which icons are considered important enough to prioritize in the 'Status Icons' tab.");
+                    "注意：現在可在「外觀」分頁中，透過「交換方式」為各種名牌類型設定狀態圖示的優先方式。也能在「狀態圖示」分頁中設定哪些圖示屬於重要狀態。");
             }
             ImGui.Dummy(new Vector2(0, 3));
         }
@@ -41,9 +41,9 @@ public sealed class GeneralTab
 
         ImGui.SameLine();
         using (_flashingText.PushColor(Plugin.Settings.TestingMode)) {
-            ImGui.Text("Enable testing mode");
+            ImGui.Text("啟用測試模式");
         }
-        ImGuiComponents.HelpMarker("Applies settings to any player, contrary to only the ones that are in the party.");
+        ImGuiComponents.HelpMarker("將設定套用至所有玩家，而不只是在隊伍中的玩家。");
 
         var chatContentMessage = Plugin.Settings.ChatContentMessage;
 
@@ -53,14 +53,14 @@ public sealed class GeneralTab
         }
 
         ImGui.SameLine();
-        ImGui.Text("Display chat message when entering duty");
-        ImGuiComponents.HelpMarker("Can be used to determine the duty type before fully loading in.");
+        ImGui.Text("進入任務時顯示聊天訊息");
+        ImGuiComponents.HelpMarker("可在載入完成前確認任務類型。");
 
         ImGuiExt.Spacer(10);
-        if (ImGuiExt.ButtonEnabledWhen(ImGui.GetIO().KeyCtrl, "Show upgrade guide again")) {
+        if (ImGuiExt.ButtonEnabledWhen(ImGui.GetIO().KeyCtrl, "再次顯示升級指南")) {
             UpgradeGuideTab.ForceRedisplay = true;
         }
-        ImGuiExt.HoverTooltip("Hold Control to allow clicking");
+        ImGuiExt.HoverTooltip("按住 Ctrl 才能點擊");
 
         _notice.DisplayNotice();
     }

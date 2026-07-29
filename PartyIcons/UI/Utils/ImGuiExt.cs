@@ -94,7 +94,7 @@ public static class ImGuiExt
             var iconId = iconGroup.GetJobIcon((uint)job);
             var icon = GetIconTexture(iconId).GetWrapOrDefault();
             if (icon != null) {
-                var textSize = ImGui.CalcTextSize("Important");
+                var textSize = ImGui.CalcTextSize("重要");
                 var imageSize = textSize.Y + ImGui.GetStyle().FramePadding.Y * 2;
 
                 var scale = iconGroup.Scale;
