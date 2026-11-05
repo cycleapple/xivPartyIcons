@@ -1,4 +1,4 @@
-﻿using Dalamud.Game.Addon.Lifecycle;
+using Dalamud.Game.Addon.Lifecycle;
 using Dalamud.Game.Addon.Lifecycle.AddonArgTypes;
 using Dalamud.Game.Gui.NamePlate;
 using Dalamud.Game.Text.SeStringHandling;
@@ -349,7 +349,7 @@ public sealed class NameplateUpdater : IDisposable
         imageNode->SetHeight(32);
 
         imageNode->WrapMode = 1;
-        imageNode->Flags = (byte)ImageNodeFlags.AutoFit;
+        imageNode->Flags = (FFXIVClientStructs.FFXIV.Component.GUI.ImageNodeFlags)ImageNodeFlags.AutoFit;
         imageNode->LoadIconTexture(60071, 0);
 
         return imageNode;

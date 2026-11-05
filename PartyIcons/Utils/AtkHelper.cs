@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using FFXIVClientStructs.FFXIV.Client.System.Memory;
@@ -103,7 +103,7 @@ public static class AtkHelper
         imageNode->NodeFlags = resNodeFlags;
         imageNode->DrawFlags = resNodeDrawFlags;
         imageNode->WrapMode = wrapMode;
-        imageNode->Flags = imageNodeFlags;
+        imageNode->Flags = (FFXIVClientStructs.FFXIV.Component.GUI.ImageNodeFlags)imageNodeFlags;
         return true;
     }
 
